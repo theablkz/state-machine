@@ -1,9 +1,6 @@
 <template>
   <div class="container">
-    <component :is="machine.component" />
-    <button @click="machine.run('VALIDATE_USER_DATA')">aaa</button>
-
-
+    <component :is="machine.component" :machine="machine" />
   </div>
 </template>
 

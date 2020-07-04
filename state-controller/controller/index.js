@@ -1,15 +1,26 @@
-
+import Validation from 'silk-way-validate/index'
 export function VALIDATE_USER_DATA(machine, form) {
+  console.log('VALIDATE_USER_DATA')
   machine.state = 'validate_user_data'
-  console.log('validate', machine.state, form)
-  machine.run('SEND_USER_DATA')
+  form.forEach((item) => {
+    item.error = !Validation.validate(item.validation, item.value, '').isValid
+  })
+  if (!form.some((item) => item.error)) {
+    machine.run('SEND_USER_DATA')
+    return
+  }
+  machine.run('VALIDATION_ERROR')
 }
-export function SEND_USER_DATA(){
+export function SEND_USER_DATA() {
   console.log('SEND_USER_DATA')
 }
 
-export function VALIDATION_ERROR() {
-  console.log('VALIDATION_ERROR')
+export function CARD_FORM() {
+  console.log('CARD_FORM')
+}
+
+export function VALIDATION_ERROR(machine) {
+  machine.state = 'idle'
 }
 
 export function FAIL_CONNECT_TO_SERVER() {
