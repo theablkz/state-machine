@@ -20,6 +20,9 @@ export const Transition = {
     SEND_USER_DATA,
     VALIDATION_ERROR,
   },
+  validate_user_data_error: {
+    VALIDATE_USER_DATA
+  },
   send_user_data: {
     FAIL_CONNECT_TO_SERVER,
     USER_DATA_ERROR,

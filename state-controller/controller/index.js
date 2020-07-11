@@ -1,4 +1,5 @@
 import Validation from 'silk-way-validate/index'
+
 export function VALIDATE_USER_DATA(machine, form) {
   console.log('VALIDATE_USER_DATA')
   machine.state = 'validate_user_data'
@@ -6,13 +7,33 @@ export function VALIDATE_USER_DATA(machine, form) {
     item.error = !Validation.validate(item.validation, item.value, '').isValid
   })
   if (!form.some((item) => item.error)) {
-    machine.run('SEND_USER_DATA')
+    machine.run('SEND_USER_DATA', form)
     return
   }
   machine.run('VALIDATION_ERROR')
 }
-export function SEND_USER_DATA() {
+
+export function SEND_USER_DATA(machine, form) {
   console.log('SEND_USER_DATA')
+
+  machine.state = 'send_user_data'
+  machine.component = () => import('~/components/loading')
+
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("200")
+    }, 1000)
+  }).then(res => {
+
+    console.log(res)
+    machine.state = 'card_form'
+    machine.component = () => import('~/components/cardForm')
+
+  }).catch(() => {
+
+    machine.run('FAIL_CONNECT_TO_SERVER')
+
+  })
 }
 
 export function CARD_FORM() {
@@ -20,11 +41,13 @@ export function CARD_FORM() {
 }
 
 export function VALIDATION_ERROR(machine) {
-  machine.state = 'idle'
+  machine.state = 'validate_user_data_error'
 }
 
 export function FAIL_CONNECT_TO_SERVER() {
   console.log('FAIL_CONNECT_TO_SERVER')
+  machine.state = 'card_form'
+  machine.component = () => import('~/components/error')
 }
 
 export function USER_DATA_ERROR() {
