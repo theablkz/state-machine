@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div>
+      <h2>тeкущее состояние: {{machine.state}}</h2>
+    </div>
     <component :is="machine.component" :machine="machine" />
   </div>
 </template>

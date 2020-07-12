@@ -10,6 +10,7 @@ import {
   SEND_CARD_FORM,
   SUCCESS,
   CARD_FORM_ERROR,
+  GO_BACK
 } from './controller'
 
 export const Transition = {
@@ -27,6 +28,10 @@ export const Transition = {
     FAIL_CONNECT_TO_SERVER,
     USER_DATA_ERROR,
     CARD_FORM,
+  },
+  fail_connect_to_server: {
+    GO_BACK,
+    SEND_USER_DATA
   },
   card_form: {
     VALIDATE_CARD_FORM,
@@ -46,13 +51,18 @@ const userForm = [
   { id: 'phone', value: '', validation: 'phone', error: false },
   { id: 'amount', value: '', validation: 'notNull', error: false },
 ]
+const cardForm = [
+  { id: 'card', value: '', validation: 'notNull', error: false },
+]
 
 export class Machine {
+  userFormResponse = {}
   constructor(transitions) {
     this.state = 'idle'
     this.transitions = transitions
     this.component = () => import('~/components/userForm')
     this.userForm = userForm
+    this.cardForm = cardForm
   }
   run(action, form) {
     const transitions = this.transitions[this.state]

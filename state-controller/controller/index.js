@@ -22,32 +22,33 @@ export function SEND_USER_DATA(machine, form) {
   new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve("200")
-    }, 1000)
+    }, 4000)
   }).then(res => {
-
-    console.log(res)
-    machine.state = 'card_form'
-    machine.component = () => import('~/components/cardForm')
-
+    machine.userFormResponse = res
+    machine.run('CARD_FORM')
   }).catch(() => {
 
     machine.run('FAIL_CONNECT_TO_SERVER')
 
   })
 }
-
-export function CARD_FORM() {
-  console.log('CARD_FORM')
+export function CARD_FORM(machine) {
+  machine.state = 'card_form'
+  machine.component = () => import('~/components/cardForm')
 }
-
 export function VALIDATION_ERROR(machine) {
   machine.state = 'validate_user_data_error'
 }
 
-export function FAIL_CONNECT_TO_SERVER() {
+export function FAIL_CONNECT_TO_SERVER(machine) {
   console.log('FAIL_CONNECT_TO_SERVER')
-  machine.state = 'card_form'
+  machine.state = 'fail_connect_to_server'
   machine.component = () => import('~/components/error')
+}
+
+export function GO_BACK(machine){
+  machine.state = 'idle'
+  machine.component = () => import('~/components/userForm')
 }
 
 export function USER_DATA_ERROR() {
